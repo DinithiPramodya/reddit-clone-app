@@ -2,8 +2,10 @@ package com.example.reddit_clone.security;
 
 import com.example.reddit_clone.exceptions.SpringRedditException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
 
+@Slf4j
 @Service
 public class JwtProvider {
 
@@ -50,6 +53,19 @@ public class JwtProvider {
         Jwts.parser().setSigningKey(getPublicKey()).build().parseClaimsJws(jwt);
         return true;
     }
+
+//    public boolean validateToken(String jwt) {
+//        try {
+//            log.info("Validating token...");
+//            Jwts.parser().setSigningKey(getPublicKey()).build().parseClaimsJws(jwt);
+//            log.info("Token is valid");
+//            return true;
+//        } catch (JwtException | IllegalArgumentException ex) {
+//            log.error("Invalid JWT Token: {}", ex.getMessage());
+//        }
+//        return false;
+//    }
+
 
     private PublicKey getPublicKey() {
         try{

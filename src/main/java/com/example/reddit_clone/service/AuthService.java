@@ -10,12 +10,14 @@ import com.example.reddit_clone.model.VerificationToken;
 import com.example.reddit_clone.repository.UserRepository;
 import com.example.reddit_clone.repository.VerificationTokenRepository;
 import com.example.reddit_clone.security.JwtProvider;
+import io.jsonwebtoken.Jwt;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -84,5 +86,14 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token =jwtProvider.generateToken(authenticate);
         return new AuthenticationResponse(token, loginRequest.getUsername());
+    }
+
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        System.out.println("user : " + username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found - " + username));
     }
 }
