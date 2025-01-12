@@ -4,6 +4,7 @@ import com.example.reddit_clone.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -20,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig{
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAthenticationFilter;
@@ -32,6 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/posts/**").authenticated()
+                        .requestMatchers("/api/comments/**").authenticated()
                         .anyRequest().authenticated()
                 );
         httpSecurity.addFilterBefore(jwtAthenticationFilter,
@@ -39,8 +41,8 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) {
+    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 //        authenticationManagerBuilder.userDetailsService(userDetailsService)
 //                .passwordEncoder(passwordEncoder());
 //    }
