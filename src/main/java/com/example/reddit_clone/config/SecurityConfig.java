@@ -34,6 +34,7 @@ public class SecurityConfig{
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/posts/**").authenticated()
                         .requestMatchers("/api/comments/**").authenticated()
+                        .requestMatchers("api/votes/**").authenticated()
                         .anyRequest().authenticated()
                 );
         httpSecurity.addFilterBefore(jwtAthenticationFilter,
